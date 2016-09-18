@@ -1,0 +1,2 @@
+%{"poison": {:hex, :poison, "2.2.0", "4763b69a8a77bd77d26f477d196428b741261a761257ff1cf92753a0d4d24a63", [:mix], []},
+  "tesla": {:hex, :tesla, "0.5.2", "614297046c638b8c1695e8b6e63e6bffd107c07a67e4cb8cc4bb46598be735f1", [:mix], [{:exjsx, ">= 0.1.0", [hex: :exjsx, optional: true]}, {:hackney, "~> 1.6.0", [hex: :hackney, optional: true]}, {:ibrowse, "~> 4.2", [hex: :ibrowse, optional: true]}, {:poison, ">= 1.0.0", [hex: :poison, optional: true]}]}}
