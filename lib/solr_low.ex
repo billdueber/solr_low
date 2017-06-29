@@ -14,6 +14,12 @@ defmodule SolrReply do
     defstruct [:docs, :numFound, :start]
   end
 
+  def reply_decode_type do
+    %SolrReply{responseHeader: %SolrReply.ResponseHeader{},
+                         response: %SolrReply.Response{}}
+  end
+
+
   def qtime(sr) do
     Map.get sr.responseHeader, :QTime
   end
@@ -48,10 +54,8 @@ defmodule SolrLow do
 
   plug Tesla.Middleware.Query, [wt: "json"]
   plug Tesla.Middleware.Headers, %{"User-Agent" => "ElixirSolrLow"}
-  plug Tesla.Middleware.JSON, engine_opts: %{as:
-          %SolrReply{responseHeader: %SolrReply.ResponseHeader{},
-                     response: %SolrReply.Response{}}
-          }
+  plug Tesla.Middleware.JSON, engine_opts: %{as: SolrReply.reply_decode_type}
+
 
   plug Tesla.Middleware.Logger
   plug Tesla.Middleware.BaseUrl
