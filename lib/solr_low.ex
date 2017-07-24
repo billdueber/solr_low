@@ -14,10 +14,8 @@ defmodule SolrReply do
     defstruct [:docs, :numFound, :start]
   end
 
-  def reply_decode_type do
-    %SolrReply{responseHeader: %SolrReply.ResponseHeader{},
-                         response: %SolrReply.Response{}}
-  end
+  @type reply_decode_type ::    %SolrReply{responseHeader: %SolrReply.ResponseHeader{},
+                                           response: %SolrReply.Response{}}
 
 
   def qtime(sr) do

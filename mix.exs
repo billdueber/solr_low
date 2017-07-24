@@ -30,7 +30,8 @@ defmodule SolrLow.Mixfile do
     [
       {:tesla, "~> 0.7"},
       {:poison, ">= 1.0.0"}, # for json en/decode
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
+      {:ecto, "~>2.0"}
     ]
   end
 end
