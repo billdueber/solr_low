@@ -1,19 +1,20 @@
-defmodule SolrLow.SolrResponse do
+defmodule SolrLow.SolrReply do
 
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key false
   embedded_schema do
-    embeds_one :responseHeader, SolrLow.SolrResponse.ResponseHeader
+    embeds_one :responseHeader, SolrLow.SolrReply.ResponseHeader
     field :response, :map
+
   end
 
   def from_json(data) when is_binary(data) do
-    Poison.decode!(data) |> from_json
+    Poison.decode!(data) |> from_map
   end
 
-  def from_json(data) when is_map(data) do
+  def from_map(data) when is_map(data) do
     y = %__MODULE__{}
     |> cast(data, [:response])
     |> cast_embed(:responseHeader)
@@ -23,7 +24,7 @@ defmodule SolrLow.SolrResponse do
   end
 end
 
-defmodule SolrLow.SolrResponse.ResponseHeader do
+defmodule SolrLow.SolrReply.ResponseHeader do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -45,13 +46,24 @@ defmodule SolrLow.SolrResponse.ResponseHeader do
     end
 
   end
+
+  defmodule SolrLow.SolrReply.Response do
+    use Ecto.Schema
+    import Ecto.Changeset
+
+    @primary_key false
+    embedded_schema do
+      field :numFound, :integer
+      field :count,  :float, virtual: true
+      field :docs, {:array, :map}
+      field :start, :integer
+
+      def changeset(struct, data) do
+        struct
+        |> cast(data, [:numFound, :docs, :start])
+      end
+    end
+
+  end
 end
 
-defmodule SolrLow.SolrResponse.ResponseHeader do
-  use Ecto.Schema
-  import Ecto.Changeset
-
-  @primary_key false
-   
-
-end
