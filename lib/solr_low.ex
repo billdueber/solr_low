@@ -5,13 +5,13 @@ defmodule SolrLow do
 
   plug Tesla.Middleware.Query, [wt: "json"]
   plug Tesla.Middleware.Headers, %{"User-Agent" => "ElixirSolrLow"}
-#  plug Tesla.Middleware.JSON
+  plug Tesla.Middleware.JSON
 
 
   plug Tesla.Middleware.Logger
   plug Tesla.Middleware.BaseUrl
 
-  def client(url) do
+  def build_client_from_url_to_core(url) do
     Tesla.build_client [
       {Tesla.Middleware.BaseUrl, url}
     ]
@@ -20,7 +20,7 @@ defmodule SolrLow do
   def keyword(client, kw, value) do
     y = SolrLow.get(client, "select", query: [q: "#{kw}:#{value}"])
     case y.status do
-      200 -> SolrLow.SolrReply.from_json  y.body
+      200 -> SolrLow.SolrReply.from_map  y.body
       _ -> {:error, y.status, y}
     end
 
