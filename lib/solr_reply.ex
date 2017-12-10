@@ -3,6 +3,10 @@ defmodule SolrLow.SolrReply do
 A generic solr reply, consisting of
   * repsonseHeader (status, qtime, parameters)
   * response (docs, numberFound (nee size), and starting record)
+
+  These willbe available as reply.response and reply.responseHeader;
+  anything else in the solr return will still be available through
+  regular Map functions
 """
   use Ecto.Schema
   import Ecto.Changeset
@@ -22,8 +26,15 @@ A generic solr reply, consisting of
     |> cast(params, [])
   end
 
+  @doc ~S"""
+  Given a string that is a solr reply represented as json,
+  turn it into a SolrReply struct
+"""
   def from_json(data) when is_binary(data) do
-    Poison.decode!(data) |> from_map
+    case Poison.decode(data) do
+      {:ok, data} -> data |> from_map
+      {:error, e} -> {:error, e}
+      _ -> _
   end
 
   def from_map(data) when is_map(data) do
