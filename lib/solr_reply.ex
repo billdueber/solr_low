@@ -1,13 +1,13 @@
 defmodule SolrLow.SolrReply do
-@moduledoc """
-A generic solr reply, consisting of
-  * repsonseHeader (status, qtime, parameters)
-  * response (docs, numberFound (nee size), and starting record)
+  @moduledoc """
+  A generic solr reply, consisting of
+    * repsonseHeader (status, qtime, parameters)
+    * response (docs, numberFound (nee size), and starting record)
 
-  These willbe available as reply.response and reply.responseHeader;
-  anything else in the solr return will still be available through
-  regular Map functions
-"""
+    These willbe available as reply.response and reply.responseHeader;
+    anything else in the solr return will still be available through
+    regular Map functions
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -27,29 +27,33 @@ A generic solr reply, consisting of
   end
 
   @doc ~S"""
-  Given a string that is a solr reply represented as json,
-  turn it into a SolrReply struct
-"""
+    Given a string that is a solr reply represented as json,
+    turn it into a SolrReply struct
+  """
   def from_json(data) when is_binary(data) do
     case Poison.decode(data) do
-      {:ok, data} -> data |> from_map
-      {:error, e} -> {:error, e}
-      _ -> _
+      {:ok, data} ->
+        data
+        |> from_map
+      {:error, e} ->
+        {:error, e}
+    end
   end
+
 
   def from_map(data) when is_map(data) do
     sr = %__MODULE__{}
-          |> cast(data, [])
-          |> cast_embed(:response)
-          |> cast_embed(:responseHeader)
-          |> apply_changes
+         |> cast(data, [])
+         |> cast_embed(:response)
+         |> cast_embed(:responseHeader)
+         |> apply_changes
 
     # Add in the virual fields as aliases
     sr
-      |> Map.put(:docs, sr.response.docs)
-      |> Map.put(:status, sr.responseHeader.status)
-      |> Map.put(:numFound, sr.response.numFound)
-      |> Map.put(:num_found, sr.response.numFound)
+    |> Map.put(:docs, sr.response.docs)
+    |> Map.put(:status, sr.responseHeader.status)
+    |> Map.put(:numFound, sr.response.numFound)
+    |> Map.put(:num_found, sr.response.numFound)
 
   end
 end
@@ -61,7 +65,7 @@ defmodule SolrLow.SolrReply.ResponseHeader do
   @primary_key false
   schema "responseHeader" do
     field :status, :integer
-    field :QTime,  :float
+    field :QTime, :float
     field :qtime, :float, virtual: true
     field :params, :map
   end
@@ -69,9 +73,9 @@ defmodule SolrLow.SolrReply.ResponseHeader do
   def changeset(struct, data) do
     struct
     |> cast(data, [:status, :QTime, :params])
-   end
+  end
 
- end
+end
 
 
 
@@ -87,10 +91,8 @@ defmodule SolrLow.SolrReply.Response do
 
     def changeset(struct, data) do
       struct
-      |> cast(data, [:numFound, :start, :docs ])
+      |> cast(data, [:numFound, :start, :docs])
     end
   end
 
 end
-
-

@@ -1,6 +1,6 @@
 require Tesla
 
-defmodule SolrLow do
+defmodule SolrLow.Client do
   use Tesla
 
   plug Tesla.Middleware.Query, [wt: "json"]
@@ -11,20 +11,36 @@ defmodule SolrLow do
   plug Tesla.Middleware.Logger
   plug Tesla.Middleware.BaseUrl
 
-  def build_client_from_url_to_core(url) do
+  def build_client_from_url(url) do
     Tesla.build_client [
       {Tesla.Middleware.BaseUrl, url}
     ]
   end
 
+  def cores(client) do
+    r = get(client, "/admin/cores")
+    case r.status do
+      200 ->
+        r.body
+        |> Map.get("status")
+        |> Map.keys
+      _ -> {:error, r.status, r}
+    end
+  end
+
   def keyword(client, kw, value) do
-    y = SolrLow.get(client, "select", query: [q: "#{kw}:#{value}"])
+    y = get(
+      client,
+      "select",
+      query: [
+        q: "#{kw}:#{value}"
+      ]
+    )
     case y.status do
       200 -> SolrLow.SolrReply.from_map  y.body
       _ -> {:error, y.status, y}
     end
 
   end
- 
 
 end
