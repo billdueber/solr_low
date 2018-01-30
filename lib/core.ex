@@ -33,7 +33,10 @@ defmodule SolrLow.Core do
     |> Client.get(p, params)
   end
 
-  def count do
+  def count(%Core{} = c) do
+    c
+    |> get([q: "*:*", rows: 0])
+    |> SolrLow.Response.numFound
   end
 
 

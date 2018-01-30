@@ -18,6 +18,10 @@ defmodule SolrLow.Client do
     }
   end
 
+  @doc """
+  A basic get: client, path, params_list
+  """
+  @spec get(map, String.t, []) :: %{}
   def get(%Client{} = c, path, params \\ []) do
     r = SolrLow.HTTP.get(c.rootclient, path, query: params)
     case r.status do
@@ -31,9 +35,10 @@ defmodule SolrLow.Client do
     Get a list of the cores currently mounted
   """
   def cores(%Client{} = c) do
-    get(c, "/admin/cores")
-        |> Map.get("status")
-        |> Map.keys
+    c
+    |> get("/admin/cores")
+    |> Map.get("status")
+    |> Map.keys
 
   end
 end
