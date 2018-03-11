@@ -23,7 +23,7 @@ defmodule SolrLow.Core do
     %Core{c | handler: handler}
   end
 
-  def path(%Core{} = core) do
+  defp path(%Core{} = core) do
     core.core <> "/" <> core.handler
   end
 
