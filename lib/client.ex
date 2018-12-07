@@ -3,9 +3,18 @@ defmodule SolrLow.Client do
   A basic solr client for talking to the solr root.
   """
 
+  alias SolrLow.Core
+
   alias __MODULE__
 
   defstruct baseurl: nil, rootclient: nil
+
+
+
+  @type t :: %__MODULE__{
+               baseurl: String.t,
+               rootclient: SolrLow.HTTP.t
+             }
 
 
   @doc """
@@ -17,6 +26,17 @@ defmodule SolrLow.Client do
       rootclient: SolrLow.HTTP.new(url)
     }
   end
+
+
+  # Getters
+  def baseurl(%SolrLow.Client{} = c) do
+    c.baseurl
+  end
+
+  def rootclient(%SolrLow.Client{} = c) do
+    c.rootclient
+  end
+
 
   @doc """
   A basic get: client, path, params_list
@@ -41,5 +61,15 @@ defmodule SolrLow.Client do
     |> Map.keys
 
   end
+
+  def core(%Client{} = c, corename) do
+    Core.new(c, corename)
+  end
+
+  def core(%Client{} = c, corename, handler) do
+    Core.new(c, corename, handler)
+  end
+
+
 end
 

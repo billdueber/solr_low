@@ -11,6 +11,8 @@ defmodule SolrLow.HTTP do
   plug Tesla.Middleware.Logger
   plug Tesla.Middleware.BaseUrl
 
+  @type t ::__MODULE__
+
   def new(url) do
     Tesla.build_client [
       {Tesla.Middleware.BaseUrl, url}

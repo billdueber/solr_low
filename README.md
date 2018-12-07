@@ -2,6 +2,17 @@
 
 **TODO: Add description**
 
+
+```elixir
+
+  url = "http://localhost:8983/solr"
+  client = SolrLow.Client.new(url) #=> ["med", "blacklight", "testcore"]
+  searchHandler = client |> SolrLow.Core.new("med") |> SolrLow.Core.set_handler("search")
+  
+
+
+```
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:

@@ -36,4 +36,7 @@ defmodule SolrResponseTest do
   test "gets the count", context do
     assert R.numFound(context[:resp]) == 2
   end
+
+
+
 end
