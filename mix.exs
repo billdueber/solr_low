@@ -28,11 +28,11 @@ defmodule SolrLow.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:tesla, "~> 0.7"},
-      {:poison, ">= 1.0.0"}, # for json en/decode
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
-      {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
-      {:ecto, "~>2.0"}
+      {:tesla, "~> 1.2"},
+      {:poison, "~> 3.0"}, # for json en/decode
+      {:ex_doc, "~> 0.1", only: :dev, runtime: false},
+      {:credo, "~> 0.9", only: [:dev, :test], runtime: false},
+      {:ecto, "~> 3.0"}
     ]
   end
 end

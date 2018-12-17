@@ -44,10 +44,9 @@ defmodule SolrLow.Client do
   @spec get(map, String.t, []) :: %{}
   def get(%Client{} = c, path, params \\ []) do
     r = SolrLow.HTTP.get(c.rootclient, path, query: params)
-    case r.status do
-      200 ->
-        r.body
-      _ -> {:error, r.status, r}
+    case r do
+      {:ok, resp} -> resp.body
+      _ -> {:error, r.status, path, params}
     end
   end
 

@@ -4,7 +4,7 @@ defmodule SolrLow.HTTP do
   use Tesla
 
   plug Tesla.Middleware.Query, [wt: "json"]
-  plug Tesla.Middleware.Headers, %{"User-Agent" => "ElixirSolrLow"}
+  plug Tesla.Middleware.Headers, [{"User-Agent", "ElixirSolrLow"}]
   plug Tesla.Middleware.JSON
 
 
@@ -14,7 +14,7 @@ defmodule SolrLow.HTTP do
   @type t ::__MODULE__
 
   def new(url) do
-    Tesla.build_client [
+    Tesla.client [
       {Tesla.Middleware.BaseUrl, url}
     ]
   end
