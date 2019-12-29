@@ -1,6 +1,6 @@
-#require Tesla
+# require Tesla
 #
-#defmodule SolrLow.Client do
+# defmodule SolrLow.Client do
 #  use Tesla
 #
 #  plug Tesla.Middleware.Query, [wt: "json"]
@@ -43,4 +43,4 @@
 #
 #  end
 #
-#end
+# end

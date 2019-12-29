@@ -9,41 +9,45 @@ defmodule SolrLow.Client do
 
   defstruct baseurl: nil, rootclient: nil
 
-
-
   @type t :: %__MODULE__{
-               baseurl: String.t,
-               rootclient: SolrLow.HTTP.t
-             }
-
+          baseurl: String.t(),
+          rootclient: SolrLow.HTTP.t()
+        }
 
   @doc """
     Create a basic client to the root of the solr installation
+
+    The argument is a URL pointing to the solr root of your solr
+    installation. Normally, this looks like
+      `http://machine.domain:8888/solr` or similar.
+
+    A new Client is automatically populated with a SolrLow.HTTP
+    for actually talking to solr.
+
+    ## Example
+
+       client = "http://localhost:8000/solr"
+                |> SolrLow.Client.new
   """
-  def new(url) do
+  @spec new(String.t(), any()) :: %Client{}
+  def new(url, rootclient(/ / SolrLow.HTTP.new(url))) do
     %__MODULE__{
       baseurl: url,
       rootclient: SolrLow.HTTP.new(url)
     }
   end
 
-
-  # Getters
-  def baseurl(%SolrLow.Client{} = c) do
-    c.baseurl
-  end
-
-  def rootclient(%SolrLow.Client{} = c) do
-    c.rootclient
-  end
-
-
   @doc """
   A basic get: client, path, params_list
+
+  A bare-bones `get` which can be used to get solr-level
+  information (such as stuff under /admin). For querying
+  of a core, you're better off using an actual %SolrLow.Core.
   """
-  @spec get(map, String.t, []) :: %{}
+  @spec get(map, String.t(), []) :: %{}
   def get(%Client{} = c, path, params \\ []) do
     r = SolrLow.HTTP.get(c.rootclient, path, query: params)
+
     case r do
       {:ok, resp} -> resp.body
       _ -> {:error, r.status, path, params}
@@ -57,8 +61,7 @@ defmodule SolrLow.Client do
     c
     |> get("/admin/cores")
     |> Map.get("status")
-    |> Map.keys
-
+    |> Map.keys()
   end
 
   def core(%Client{} = c, corename) do
@@ -66,9 +69,6 @@ defmodule SolrLow.Client do
   end
 
   def core(%Client{} = c, corename, handler) do
-    Core.new(c, corename, handler)
+    c |> Core.new(corename) |> Core.request_handler(handler)
   end
-
-
 end
-

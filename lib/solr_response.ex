@@ -25,5 +25,4 @@ defmodule SolrLow.Response do
   def numFound(%{"response" => %{"numFound" => n}}) do
     n
   end
-
 end
